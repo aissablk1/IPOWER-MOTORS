@@ -1,0 +1,19 @@
+{
+  "version": "2012-10-17",
+  "statement": [
+    {
+      "sid": "PublicReadGetObject",
+      "effect": "Allow",
+      "principal": "*",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::ipower-motors-frontend/*"
+    },
+    {
+      "sid": "PublicReadGetObjectDocuments",
+      "effect": "Allow",
+      "principal": "*",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::ipower-motors-documents/*"
+    }
+  ]
+}

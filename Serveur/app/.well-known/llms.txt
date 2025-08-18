@@ -1,0 +1,6 @@
+# llms.txt — Déclaration d'origine des contenus IA
+Website: https://ipowerfrance.fr/
+Contact: mailto:contact@ipowerfrance.fr
+Policy: https://ipowerfrance.fr/ai-policy
+AI: Allow
+

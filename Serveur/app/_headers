@@ -1,0 +1,18 @@
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+
+/apple-app-site-association
+  Content-Type: application/json
+
+/.well-known/assetlinks.json
+  Content-Type: application/json
+
+/.well-known/gpc.json
+  Content-Type: application/json
+
+/.well-known/dnt-policy.txt
+  Content-Type: text/plain; charset=utf-8
+
+/.well-known/apple-developer-merchantid-domain-association
+  Content-Type: text/plain; charset=utf-8
+

@@ -1,0 +1,53 @@
+{
+  "Rules": [
+    {
+      "ID": "TransitionToIA",
+      "Status": "Enabled",
+      "Filter": {
+        "Prefix": "documents/"
+      },
+      "Transitions": [
+        {
+          "Days": 30,
+          "StorageClass": "STANDARD_IA"
+        }
+      ]
+    },
+    {
+      "ID": "TransitionToGlacier",
+      "Status": "Enabled",
+      "Filter": {
+        "Prefix": "backups/"
+      },
+      "Transitions": [
+        {
+          "Days": 90,
+          "StorageClass": "GLACIER"
+        }
+      ]
+    },
+    {
+      "ID": "ExpireOldVersions",
+      "Status": "Enabled",
+      "Filter": {
+        "Prefix": "documents/"
+      },
+      "NoncurrentVersionTransitions": [
+        {
+          "NoncurrentDays": 30,
+          "StorageClass": "STANDARD_IA"
+        }
+      ],
+      "NoncurrentVersionExpiration": {
+        "NoncurrentDays": 365
+      }
+    },
+    {
+      "ID": "AbortIncompleteMultipartUpload",
+      "Status": "Enabled",
+      "AbortIncompleteMultipartUpload": {
+        "DaysAfterInitiation": 7
+      }
+    }
+  ]
+}

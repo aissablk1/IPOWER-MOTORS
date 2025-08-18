@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cd "/Volumes/Professionnel/CRÉATIVE AÏSSA/Entreprises/IPOWER MOTORS/Site Web/Serveur" && touch .gitignore && { grep -qxF "/node_modules/" .gitignore || echo "/node_modules/" >> .gitignore; } && { grep -qxF "/**/node_modules/" .gitignore || echo "/**/node_modules/" >> .gitignore; } && { grep -qxF ".DS_Store" .gitignore || echo ".DS_Store" >> .gitignore; } && { grep -qxF "app/backend/.env" .gitignore || echo "app/backend/.env" >> .gitignore; } && { grep -qxF "app/backend/.env.*" .gitignore || echo "app/backend/.env.*" >> .gitignore; } && git rm --cached app/backend/.env || true && git add .gitignore && git commit -m "chore(security): ignore .env and node_modules; remove tracked .env" || echo "Rien à commit" && git push -u origin main
+

@@ -1,0 +1,28 @@
+{
+    "name": "IPOWER MOTORS",
+    "description": "Centre esthétique auto et pare-brise à Lescure-d'Albigeois. Diagnostic, entretien, rénovation et remplacement de vitrage automobile.",
+    "homepage": "https://ipowerfrance.fr",
+    "contact": {
+        "email": "contact@ipowerfrance.fr",
+        "phone": "+33 5 31 51 09 59"
+    },
+    "environment": {
+        "framework": "",
+        "hosting": "",
+        "repository": "https://github.com/aissablk1/IPOWER-MOTORS",
+        "platform": ""
+    },
+    "devtools": {
+        "inspector": true,
+        "debugging": true,
+        "remote-access": false,
+        "features": ["network", "performance", "console", "source-maps"]
+    },
+    "audits": {
+        "accessibility": "AAA",
+        "performance": "optimized",
+        "seo": "compliant",
+        "best-practices": "ok"
+    },
+    "lastUpdated": "2025-06-02T00:00:00Z"
+}

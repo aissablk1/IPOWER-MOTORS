@@ -1,0 +1,4 @@
+Policy: Respect du signal Do Not Track (DNT)
+Contact: mailto:contact@ipowerfrance.fr
+Scope: Site et services associés à ipowerfrance.fr
+

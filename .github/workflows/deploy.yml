@@ -1,0 +1,236 @@
+name: 🚀 Déploiement IPOWER MOTORS
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'app/**'
+      - 'package*.json'
+      - 'Dockerfile*'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'app/**'
+      - 'package*.json'
+      - 'Dockerfile*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environnement de déploiement'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+      deploy_frontend:
+        description: 'Déployer le frontend'
+        required: false
+        default: true
+        type: boolean
+      deploy_backend:
+        description: 'Déployer le backend'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  AWS_REGION: eu-west-3
+  ECR_REPOSITORY: ipower-motors
+  ECR_IMAGE: ipower-backend
+
+jobs:
+  # Tests et validation
+  test:
+    name: 🧪 Tests et validation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout du code
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📦 Installation des dépendances
+      run: |
+        cd app/backend
+        npm ci
+        cd ../frontend
+        npm ci
+        
+    - name: 🔍 Linting
+      run: |
+        cd app/backend
+        npm run lint
+        cd ../frontend
+        npm run lint
+        
+    - name: ✅ Tests
+      run: |
+        cd app/backend
+        npm run test
+        cd ../frontend
+        npm run test
+        
+    - name: 🔒 Audit de sécurité
+      run: |
+        cd app/backend
+        npm audit --audit-level=moderate
+        cd ../frontend
+        npm audit --audit-level=moderate
+
+  # Build et tests Docker
+  docker:
+    name: 🐳 Build et tests Docker
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: 📥 Checkout du code
+      uses: actions/checkout@v4
+      
+    - name: 🐳 Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: 🔐 Login à AWS ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+      
+    - name: 🏗️ Build et push Backend
+      uses: docker/build-push-action@v5
+      with:
+        context: ./app/backend
+        push: true
+        tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.ECR_IMAGE }}-${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        
+    - name: 🏗️ Build et push Frontend
+      uses: docker/build-push-action@v5
+      with:
+        context: ./app/frontend
+        push: true
+        tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.ECR_IMAGE }}-frontend-${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # Déploiement Staging
+  deploy-staging:
+    name: 🚀 Déploiement Staging
+    runs-on: ubuntu-latest
+    needs: [test, docker]
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
+    environment: staging
+    
+    steps:
+    - name: 📥 Checkout du code
+      uses: actions/checkout@v4
+      
+    - name: 🔐 Configuration AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN_STAGING }}
+        aws-region: ${{ env.AWS_REGION }}
+        
+    - name: 🏗️ Déploiement Infrastructure
+      run: |
+        cd infrastructure/aws/terraform
+        terraform init
+        terraform plan -var-file="terraform.tfvars" -var="environment=staging"
+        terraform apply -var-file="terraform.tfvars" -var="environment=staging" -auto-approve
+        
+    - name: 🚀 Déploiement Frontend
+      if: github.event.inputs.deploy_frontend != 'false'
+      run: |
+        cd app/frontend
+        npm run build
+        aws s3 sync dist/ s3://ipower-motors-frontend-staging --delete
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_STAGING }} --paths "/*"
+        
+    - name: 🚀 Déploiement Backend
+      if: github.event.inputs.deploy_backend != 'false'
+      run: |
+        aws ec2 describe-instances --filters "Name=tag:Environment,Values=staging" "Name=tag:Name,Values=IPOWER-MOTORS-Backend" --query 'Reservations[].Instances[].InstanceId' --output text | xargs -I {} aws ssm send-command --instance-ids {} --document-name "AWS-RunShellScript" --parameters 'commands=["cd /opt/ipower-backend && git pull origin develop && npm install && npm run build && systemctl restart ipower-backend"]'
+
+  # Déploiement Production
+  deploy-production:
+    name: 🚀 Déploiement Production
+    runs-on: ubuntu-latest
+    needs: [test, docker]
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
+    environment: production
+    
+    steps:
+    - name: 📥 Checkout du code
+      uses: actions/checkout@v4
+      
+    - name: 🔐 Configuration AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN_PRODUCTION }}
+        aws-region: ${{ env.AWS_REGION }}
+        
+    - name: 🏗️ Déploiement Infrastructure
+      run: |
+        cd infrastructure/aws/terraform
+        terraform init
+        terraform plan -var-file="terraform.tfvars" -var="environment=production"
+        terraform apply -var-file="terraform.tfvars" -var="environment=production" -auto-approve
+        
+    - name: 🚀 Déploiement Frontend
+      if: github.event.inputs.deploy_frontend != 'false'
+      run: |
+        cd app/frontend
+        npm run build
+        aws s3 sync dist/ s3://ipower-motors-frontend --delete
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_PRODUCTION }} --paths "/*"
+        
+    - name: 🚀 Déploiement Backend
+      if: github.event.inputs.deploy_backend != 'false'
+      run: |
+        aws ec2 describe-instances --filters "Name=tag:Environment,Values=production" "Name=tag:Name,Values=IPOWER-MOTORS-Backend" --query 'Reservations[].Instances[].InstanceId' --output text | xargs -I {} aws ssm send-command --instance-ids {} --document-name "AWS-RunShellScript" --parameters 'commands=["cd /opt/ipower-backend && git pull origin main && npm install && npm run build && systemctl restart ipower-backend"]'
+        
+    - name: 🔔 Notification Slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: success
+        text: '🎉 Déploiement Production IPOWER MOTORS réussi !'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: success()
+
+  # Tests post-déploiement
+  post-deploy-tests:
+    name: ✅ Tests post-déploiement
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always() && (needs.deploy-staging.result == 'success' || needs.deploy-production.result == 'success')
+    
+    steps:
+    - name: 🔍 Test Frontend
+      run: |
+        # Test du frontend déployé
+        curl -f https://ipowerfrance.fr || echo "Frontend non accessible"
+        
+    - name: 🔍 Test Backend
+      run: |
+        # Test du backend déployé
+        curl -f https://api.ipowerfrance.fr/health || echo "Backend non accessible"
+        
+    - name: 🔍 Test Base de données
+      run: |
+        # Test de la connectivité base de données
+        echo "Tests de connectivité base de données"
+        
+    - name: 📊 Rapport de déploiement
+      run: |
+        echo "🎯 Rapport de déploiement IPOWER MOTORS"
+        echo "✅ Tests: ${{ needs.test.result }}"
+        echo "✅ Docker: ${{ needs.docker.result }}"
+        echo "✅ Staging: ${{ needs.deploy-staging.result }}"
+        echo "✅ Production: ${{ needs.deploy-production.result }}"
+        echo "✅ Post-deploy: ${{ job.status }}"

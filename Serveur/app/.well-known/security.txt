@@ -1,0 +1,5 @@
+Contact: mailto:contact@ipowerfrance.fr
+Expires: 2026-12-31T23:59:59Z
+Policy: https://ipowerfrance.fr/security
+Preferred-Languages: fr, en
+

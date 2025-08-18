@@ -1,0 +1,38 @@
+# Zone DNS pour ipowerfrance.fr - Configuration OVH Cloud
+# Pointage vers l'infrastructure AWS
+
+$TTL 3600
+@       IN      SOA     ns1.ovh.net. admin.ipowerfrance.fr. (
+                        2025010101      ; Serial
+                        3600            ; Refresh
+                        1800            ; Retry
+                        1209600         ; Expire
+                        3600            ; Minimum TTL
+                        )
+
+; Serveurs de noms OVH
+@       IN      NS      ns1.ovh.net.
+@       IN      NS      ns2.ovh.net.
+
+; Enregistrements principaux
+@       IN      A       52.47.0.0      ; IP du Load Balancer AWS (à remplacer)
+www     IN      CNAME   @               ; Redirection www vers racine
+
+; API et services backend
+api     IN      CNAME   api.ipowerfrance.fr.aws.  ; Pointage vers AWS
+admin   IN      CNAME   admin.ipowerfrance.fr.aws. ; Interface d'administration
+
+; Services AWS spécifiques
+aws     IN      CNAME   d1234567890.cloudfront.net. ; CloudFront (à remplacer)
+
+; Enregistrements de sécurité
+@       IN      TXT     "v=spf1 include:_spf.google.com ~all" ; SPF
+@       IN      TXT     "google-site-verification=YOUR_VERIFICATION_CODE" ; Google Search Console
+
+; Enregistrements pour les services
+mail    IN      MX      10 mail.ipowerfrance.fr.
+mail    IN      A       52.47.0.0      ; Serveur mail (à configurer)
+
+; Sous-domaines pour les services
+cdn     IN      CNAME   d1234567890.cloudfront.net. ; CDN CloudFront
+static  IN      CNAME   s3-website-eu-west-3.amazonaws.com. ; S3 Static

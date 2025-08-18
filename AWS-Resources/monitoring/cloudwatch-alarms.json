@@ -1,0 +1,69 @@
+{
+  "Alarms": [
+    {
+      "AlarmName": "IPOWER-MOTORS-EC2-CPU-High",
+      "AlarmDescription": "CPU utilisation élevée sur l'instance EC2",
+      "MetricName": "CPUUtilization",
+      "Namespace": "AWS/EC2",
+      "Statistic": "Average",
+      "Period": 300,
+      "EvaluationPeriods": 2,
+      "Threshold": 80,
+      "ComparisonOperator": "GreaterThanThreshold",
+      "AlarmActions": ["arn:aws:sns:eu-west-3:ACCOUNT_ID:ipower-motors-alerts"],
+      "OKActions": ["arn:aws:sns:eu-west-3:ACCOUNT_ID:ipower-motors-alerts"]
+    },
+    {
+      "AlarmName": "IPOWER-MOTORS-EC2-Memory-High",
+      "AlarmDescription": "Utilisation mémoire élevée sur l'instance EC2",
+      "MetricName": "MemoryUtilization",
+      "Namespace": "AWS/EC2",
+      "Statistic": "Average",
+      "Period": 300,
+      "EvaluationPeriods": 2,
+      "Threshold": 85,
+      "ComparisonOperator": "GreaterThanThreshold",
+      "AlarmActions": ["arn:aws:sns:eu-west-3:ACCOUNT_ID:ipower-motors-alerts"],
+      "OKActions": ["arn:aws:sns:eu-west-3:ACCOUNT_ID:ipower-motors-alerts"]
+    },
+    {
+      "AlarmName": "IPOWER-MOTORS-RDS-CPU-High",
+      "AlarmDescription": "CPU utilisation élevée sur RDS",
+      "MetricName": "CPUUtilization",
+      "Namespace": "AWS/RDS",
+      "Statistic": "Average",
+      "Period": 300,
+      "EvaluationPeriods": 2,
+      "Threshold": 80,
+      "ComparisonOperator": "GreaterThanThreshold",
+      "AlarmActions": ["arn:aws:sns:eu-west-3:ACCOUNT_ID:ipower-motors-alerts"],
+      "OKActions": ["arn:aws:sns:eu-west-3:ACCOUNT_ID:ipower-motors-alerts"]
+    },
+    {
+      "AlarmName": "IPOWER-MOTORS-RDS-Connections-High",
+      "AlarmDescription": "Nombre de connexions élevé sur RDS",
+      "MetricName": "DatabaseConnections",
+      "Namespace": "AWS/RDS",
+      "Statistic": "Average",
+      "Period": 300,
+      "EvaluationPeriods": 2,
+      "Threshold": 80,
+      "ComparisonOperator": "GreaterThanThreshold",
+      "AlarmActions": ["arn:aws:sns:eu-west-3:ACCOUNT_ID:ipower-motors-alerts"],
+      "OKActions": ["arn:aws:sns:eu-west-3:ACCOUNT_ID:ipower-motors-alerts"]
+    },
+    {
+      "AlarmName": "IPOWER-MOTORS-Application-Health",
+      "AlarmDescription": "Santé de l'application",
+      "MetricName": "HealthyHostCount",
+      "Namespace": "AWS/ApplicationELB",
+      "Statistic": "Average",
+      "Period": 60,
+      "EvaluationPeriods": 2,
+      "Threshold": 1,
+      "ComparisonOperator": "LessThanThreshold",
+      "AlarmActions": ["arn:aws:sns:eu-west-3:ACCOUNT_ID:ipower-motors-alerts"],
+      "OKActions": ["arn:aws:sns:eu-west-3:ACCOUNT_ID:ipower-motors-alerts"]
+    }
+  ]
+}

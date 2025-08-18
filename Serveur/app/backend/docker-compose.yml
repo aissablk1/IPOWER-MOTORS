@@ -1,0 +1,258 @@
+version: '3.8'
+
+services:
+  # Base de données PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: ipower-postgres
+    environment:
+      POSTGRES_DB: ipower_motors
+      POSTGRES_USER: ipower_admin
+      POSTGRES_PASSWORD: BO6p1ROrRhn7ZDdkYpDvk7QtqV+av/SsdbFKvLogu4E=
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ipower-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ipower_admin -d ipower_motors"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Cache Redis
+  redis:
+    image: redis:7-alpine
+    container_name: ipower-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ipower-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend Node.js
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ipower-backend
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      HOST: 0.0.0.0
+      
+      # Base de données
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ipower_motors
+      DB_USER: ipower_admin
+      DB_PASSWORD: BO6p1ROrRhn7ZDdkYpDvk7QtqV+av/SsdbFKvLogu4E=
+      DB_SSL: false
+      
+      # Redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+      REDIS_TTL: 3600
+      
+      # JWT
+      JWT_SECRET: BO6p1ROrRhn7ZDdkYpDvk7QtqV+av/SsdbFKvLogu4E=
+      JWT_EXPIRES_IN: 24h
+      
+      # CORS
+      CORS_ORIGIN: http://localhost:5173,http://localhost:3000
+      
+      # Logging
+      LOG_LEVEL: debug
+      LOG_FORMAT: json
+      
+      # Monitoring
+      ENABLE_METRICS: true
+      HEALTH_CHECK_INTERVAL: 30000
+      
+      # Email (MailHog pour développement)
+      EMAIL_FROM: dev@ipowerfrance.fr
+      EMAIL_HOST: mailhog
+      EMAIL_PORT: 1025
+      EMAIL_SECURE: false
+      
+      # Upload
+      MAX_FILE_SIZE: 10485760
+      UPLOAD_DIR: /app/uploads
+      
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ipower-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Frontend (optionnel - peut être lancé séparément)
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: ipower-frontend
+    environment:
+      VITE_API_URL: http://localhost:3001
+      VITE_APP_NAME: IPOWER MOTORS
+      VITE_APP_VERSION: 1.0.0
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    networks:
+      - ipower-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # MailHog pour tests email
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: ipower-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - ipower-network
+    restart: unless-stopped
+
+  # MinIO pour simulation S3
+  minio:
+    image: minio/minio:latest
+    container_name: ipower-minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    ports:
+      - "9000:9000"  # API
+      - "9001:9001"  # Console Web
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - ipower-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    restart: unless-stopped
+
+  # Nginx pour proxy et cache
+  nginx:
+    image: nginx:alpine
+    container_name: ipower-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - ipower-network
+    restart: unless-stopped
+
+  # Monitoring avec Prometheus + Grafana
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ipower-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - ipower-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ipower-grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin123
+      GF_USERS_ALLOW_SIGN_UP: false
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    networks:
+      - ipower-network
+    restart: unless-stopped
+
+  # Base de données de test
+  postgres-test:
+    image: postgres:15-alpine
+    container_name: ipower-postgres-test
+    environment:
+      POSTGRES_DB: ipower_motors_test
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    networks:
+      - ipower-network
+    profiles:
+      - test
+
+volumes:
+  postgres_data:
+    driver: local
+  postgres_test_data:
+    driver: local
+  redis_data:
+    driver: local
+  minio_data:
+    driver: local
+  uploads_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  ipower-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

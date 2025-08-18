@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Compatibilité - Services IPOWER MOTORS</title>
+    <style>
+        /* Styles de test basiques */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .success { background: rgba(40, 167, 69, 0.3); border: 1px solid #28a745; }
+        .warning { background: rgba(255, 193, 7, 0.3); border: 1px solid #ffc107; }
+        .error { background: rgba(220, 53, 69, 0.3); border: 1px solid #dc3545; }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .icon-test {
+            width: 64px;
+            height: 64px;
+            margin: 10px 0;
+        }
+        
+        .performance-meter {
+            width: 100%;
+            height: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .performance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Test de Compatibilité - Services IPOWER MOTORS</h1>
+        
+        <!-- Test des fonctionnalités CSS -->
+        <div class="test-section">
+            <h2>🎨 Tests CSS et Glassmorphism</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Backdrop Filter</h3>
+                    <div id="backdrop-test" style="
+                        background: rgba(255,255,255,0.1);
+                        backdrop-filter: blur(10px);
+                        padding: 20px;
+                        border-radius: 10px;
+                        margin: 10px 0;
+                    ">
+                        Test backdrop-filter
+                    </div>
+                    <div id="backdrop-result" class="test-result"></div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>CSS Grid</h3>
+                    <div id="grid-test" style="
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 10px;
+                        margin: 10px 0;
+                    ">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px;">Item 1</div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px;">Item 2</div>
+                    </div>
+                    <div id="grid-result" class="test-result"></div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>CSS Variables</h3>
+                    <div id="css-vars-test" style="
+                        --test-color: #8BD6FF;
+                        background: var(--test-color);
+                        padding: 10px;
+                        border-radius: 5px;
+                        margin: 10px 0;
+                    ">
+                        Test CSS Variables
+                    </div>
+                    <div id="css-vars-result" class="test-result"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test des icônes SVG -->
+        <div class="test-section">
+            <h2>🎯 Tests des Icônes SVG</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Polissage</h3>
+                    <img src="/Serveur/assets/images/icons/polish.svg" alt="Test icône polissage" class="icon-test">
+                    <div id="polish-result" class="test-result"></div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Pare-brise</h3>
+                    <img src="/Serveur/assets/images/icons/windshield.svg" alt="Test icône pare-brise" class="icon-test">
+                    <div id="windshield-result" class="test-result"></div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Intérieur</h3>
+                    <img src="/Serveur/assets/images/icons/interior.svg" alt="Test icône intérieur" class="icon-test">
+                    <div id="interior-result" class="test-result"></div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Céramique</h3>
+                    <img src="/Serveur/assets/images/icons/ceramic.svg" alt="Test icône céramique" class="icon-test">
+                    <div id="ceramic-result" class="test-result"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test JavaScript -->
+        <div class="test-section">
+            <h2>⚡ Tests JavaScript</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Intersection Observer</h3>
+                    <div id="intersection-test">Test en cours...</div>
+                    <div id="intersection-result" class="test-result"></div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Request Animation Frame</h3>
+                    <div id="raf-test">Test en cours...</div>
+                    <div id="raf-result" class="test-result"></div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Touch Events</h3>
+                    <div id="touch-test" style="
+                        background: rgba(255,255,255,0.1);
+                        padding: 20px;
+                        border-radius: 10px;
+                        margin: 10px 0;
+                        cursor: pointer;
+                    ">
+                        Touchez-moi pour tester
+                    </div>
+                    <div id="touch-result" class="test-result"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test de Performance -->
+        <div class="test-section">
+            <h2>📊 Tests de Performance</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Temps de Chargement</h3>
+                    <div class="performance-meter">
+                        <div id="load-performance" class="performance-fill" style="width: 0%"></div>
+                    </div>
+                    <div id="load-result" class="test-result"></div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Réactivité</h3>
+                    <div class="performance-meter">
+                        <div id="responsive-performance" class="performance-fill" style="width: 0%"></div>
+                    </div>
+                    <div id="responsive-result" class="test-result"></div>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Mémoire</h3>
+                    <div class="performance-meter">
+                        <div id="memory-performance" class="performance-fill" style="width: 0%"></div>
+                    </div>
+                    <div id="memory-result" class="test-result"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test de présence de toutes les images -->
+        <div class="test-section">
+            <h2>🖼️ Présence de toutes les images (force la copie Jekyll)</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Favicon</h3>
+                    <img src="/Serveur/assets/images/favicon/apple-touch-icon.png" alt="apple-touch-icon" style="width:48px;">
+                    <img src="/Serveur/assets/images/favicon/favicon-96x96.png" alt="favicon-96x96" style="width:48px;">
+                    <img src="/Serveur/assets/images/favicon/favicon.ico" alt="favicon.ico" style="width:48px;">
+                    <img src="/Serveur/assets/images/favicon/favicon.svg" alt="favicon.svg" style="width:48px;">
+                    <img src="/Serveur/assets/images/favicon/web-app-manifest-192x192.png" alt="web-app-manifest-192x192" style="width:48px;">
+                    <img src="/Serveur/assets/images/favicon/web-app-manifest-512x512.png" alt="web-app-manifest-512x512" style="width:48px;">
+                </div>
+                <div class="feature-card">
+                    <h3>Icons (SVG)</h3>
+                    <img src="/Serveur/assets/images/icons/ceramic.svg" alt="ceramic.svg" style="width:48px;">
+                    <img src="/Serveur/assets/images/icons/interior.svg" alt="interior.svg" style="width:48px;">
+                    <img src="/Serveur/assets/images/icons/polish.svg" alt="polish.svg" style="width:48px;">
+                    <img src="/Serveur/assets/images/icons/windshield.svg" alt="windshield.svg" style="width:48px;">
+                </div>
+                <div class="feature-card">
+                    <h3>Logos</h3>
+                    <img src="/Serveur/assets/images/logo/Logo – IPOWER MOTORS.png" alt="Logo – IPOWER MOTORS" style="width:80px;">
+                    <img src="/Serveur/assets/images/logo/Logo — IPOWER - texte uniqument.png" alt="Logo — IPOWER - texte uniqument" style="width:80px;">
+                    <img src="/Serveur/assets/images/logo/Logo — IPOWER.png" alt="Logo — IPOWER" style="width:80px;">
+                    <img src="/Serveur/assets/images/logo/Logo — IPOWER Clean.png" alt="Logo — IPOWER Clean" style="width:80px;">
+                    <img src="/Serveur/assets/images/logo/Logo — IPOWER MOTORS - Version carré - Fond noir.png" alt="Logo — IPOWER MOTORS - Version carré - Fond noir" style="width:80px;">
+                    <img src="/Serveur/assets/images/logo/Logo — IPOWER MOTORS - Version carré - Transparent.png" alt="Logo — IPOWER MOTORS - Version carré - Transparent" style="width:80px;">
+                    <img src="/Serveur/assets/images/logo/Logo — IPOWER MOTORS - Version carré sérré.png" alt="Logo — IPOWER MOTORS - Version carré sérré" style="width:80px;">
+                    <img src="/Serveur/assets/images/logo/Logo — IPOWER MOTORS - iP.png" alt="Logo — IPOWER MOTORS - iP" style="width:80px;">
+                </div>
+                <div class="feature-card">
+                    <h3>Social</h3>
+                    <img src="/Serveur/assets/images/social/Discord-icon.svg" alt="Discord-icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/Facebook-Icon.svg" alt="Facebook-Icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/GitHub-icon.svg" alt="GitHub-icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/Instagram-icon.svg" alt="Instagram-icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/LinkedIn-icon.svg" alt="LinkedIn-icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/Snapchat-icon.svg" alt="Snapchat-icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/Telegram-icon.svg" alt="Telegram-icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/Threads-icon.svg" alt="Threads-icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/TikTok-icon.svg" alt="TikTok-icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/Twitter-icon.svg" alt="Twitter-icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/WhatsApp-icon.svg" alt="WhatsApp-icon" style="width:32px;">
+                    <img src="/Serveur/assets/images/social/YouTube-icon.svg" alt="YouTube-icon" style="width:32px;">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test de présence de toutes les vidéos et médias -->
+        <div class="test-section">
+            <h2>🎬 Présence de toutes les vidéos et médias</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Vidéos (stocks)</h3>
+                    <video src="/Serveur/assets/videos/stocks/Car-Garage-Sport-Supercar.mp4" controls preload="metadata" style="width:180px;max-width:100%;margin-bottom:1rem;"></video>
+                </div>
+                <div class="feature-card">
+                    <h3>Images WebP (exemple)</h3>
+                    <img src="/Serveur/assets/images/favicon/web-app-manifest-192x192.png" alt="web-app-manifest-192x192" style="width:48px;">
+                </div>
+                <div class="feature-card">
+                    <h3>PDF / Documents (exemple)</h3>
+                    <a href="/Serveur/assets/docs/services-refonte.md" target="_blank">services-refonte.md</a>
+                </div>
+                <div class="feature-card">
+                    <h3>Vidéos WebM (exemple)</h3>
+                    <video src="/Serveur/assets/videos/stocks/Car-Garage-Sport-Supercar.webm" controls preload="metadata" style="width:180px;max-width:100%;margin-bottom:1rem;"></video>
+                </div>
+                <div class="feature-card">
+                    <h3>PDF (exemple)</h3>
+                    <a href="/Serveur/assets/docs/exemple.pdf" target="_blank">exemple.pdf</a>
+                </div>
+                <div class="feature-card">
+                    <h3>DOCX (exemple)</h3>
+                    <a href="/Serveur/assets/docs/exemple.docx" target="_blank">exemple.docx</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Résumé -->
+        <div class="test-section">
+            <h2>📋 Résumé des Tests</h2>
+            <div id="summary" class="test-result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Tests de compatibilité
+        class CompatibilityTester {
+            constructor() {
+                this.results = {
+                    css: {},
+                    icons: {},
+                    js: {},
+                    performance: {}
+                };
+                this.runTests();
+            }
+            
+            runTests() {
+                this.testCSS();
+                this.testIcons();
+                this.testJavaScript();
+                this.testPerformance();
+                this.generateSummary();
+            }
+            
+            testCSS() {
+                // Test backdrop-filter
+                const backdropTest = document.getElementById('backdrop-test');
+                const backdropResult = document.getElementById('backdrop-result');
+                
+                if (this.supportsBackdropFilter()) {
+                    backdropResult.innerHTML = '<span class="success">✅ Backdrop-filter supporté</span>';
+                    this.results.css.backdropFilter = true;
+                } else {
+                    backdropResult.innerHTML = '<span class="warning">⚠️ Backdrop-filter non supporté</span>';
+                    this.results.css.backdropFilter = false;
+                }
+                
+                // Test CSS Grid
+                const gridResult = document.getElementById('grid-result');
+                if (this.supportsCSSGrid()) {
+                    gridResult.innerHTML = '<span class="success">✅ CSS Grid supporté</span>';
+                    this.results.css.grid = true;
+                } else {
+                    gridResult.innerHTML = '<span class="error">❌ CSS Grid non supporté</span>';
+                    this.results.css.grid = false;
+                }
+                
+                // Test CSS Variables
+                const cssVarsResult = document.getElementById('css-vars-result');
+                if (this.supportsCSSVariables()) {
+                    cssVarsResult.innerHTML = '<span class="success">✅ CSS Variables supportées</span>';
+                    this.results.css.variables = true;
+                } else {
+                    cssVarsResult.innerHTML = '<span class="error">❌ CSS Variables non supportées</span>';
+                    this.results.css.variables = false;
+                }
+            }
+            
+            testIcons() {
+                const icons = ['polish', 'windshield', 'interior', 'ceramic'];
+                
+                icons.forEach(icon => {
+                    const img = new Image();
+                    const result = document.getElementById(`${icon}-result`);
+                    
+                    img.onload = () => {
+                        result.innerHTML = '<span class="success">✅ Icône chargée</span>';
+                        this.results.icons[icon] = true;
+                    };
+                    
+                    img.onerror = () => {
+                        result.innerHTML = '<span class="error">❌ Icône non trouvée</span>';
+                        this.results.icons[icon] = false;
+                    };
+                    
+                    img.src = `/assets/images/icons/${icon}.svg`;
+                });
+            }
+            
+            testJavaScript() {
+                // Test Intersection Observer
+                const intersectionResult = document.getElementById('intersection-result');
+                if ('IntersectionObserver' in window) {
+                    intersectionResult.innerHTML = '<span class="success">✅ Intersection Observer supporté</span>';
+                    this.results.js.intersectionObserver = true;
+                } else {
+                    intersectionResult.innerHTML = '<span class="warning">⚠️ Intersection Observer non supporté</span>';
+                    this.results.js.intersectionObserver = false;
+                }
+                
+                // Test Request Animation Frame
+                const rafResult = document.getElementById('raf-result');
+                if ('requestAnimationFrame' in window) {
+                    rafResult.innerHTML = '<span class="success">✅ Request Animation Frame supporté</span>';
+                    this.results.js.raf = true;
+                } else {
+                    rafResult.innerHTML = '<span class="error">❌ Request Animation Frame non supporté</span>';
+                    this.results.js.raf = false;
+                }
+                
+                // Test Touch Events
+                const touchTest = document.getElementById('touch-test');
+                const touchResult = document.getElementById('touch-result');
+                
+                if ('ontouchstart' in window) {
+                    touchResult.innerHTML = '<span class="success">✅ Touch Events supportés</span>';
+                    this.results.js.touch = true;
+                    
+                    touchTest.addEventListener('touchstart', () => {
+                        touchResult.innerHTML = '<span class="success">✅ Touch Events fonctionnels</span>';
+                    });
+                } else {
+                    touchResult.innerHTML = '<span class="warning">⚠️ Touch Events non supportés</span>';
+                    this.results.js.touch = false;
+                }
+            }
+            
+            testPerformance() {
+                const startTime = performance.now();
+                
+                // Test de temps de chargement
+                setTimeout(() => {
+                    const loadTime = performance.now() - startTime;
+                    const loadPerformance = document.getElementById('load-performance');
+                    const loadResult = document.getElementById('load-result');
+                    
+                    const score = Math.max(0, 100 - (loadTime / 10));
+                    loadPerformance.style.width = `${score}%`;
+                    
+                    if (score > 80) {
+                        loadResult.innerHTML = `<span class="success">✅ Excellent (${loadTime.toFixed(2)}ms)</span>`;
+                    } else if (score > 60) {
+                        loadResult.innerHTML = `<span class="warning">⚠️ Bon (${loadTime.toFixed(2)}ms)</span>`;
+                    } else {
+                        loadResult.innerHTML = `<span class="error">❌ Lent (${loadTime.toFixed(2)}ms)</span>`;
+                    }
+                    
+                    this.results.performance.loadTime = loadTime;
+                }, 100);
+                
+                // Test de réactivité
+                let frameCount = 0;
+                const testFPS = () => {
+                    frameCount++;
+                    if (frameCount < 60) {
+                        requestAnimationFrame(testFPS);
+                    } else {
+                        const fps = frameCount / 1; // 1 seconde
+                        const responsivePerformance = document.getElementById('responsive-performance');
+                        const responsiveResult = document.getElementById('responsive-result');
+                        
+                        const score = Math.min(100, fps * 1.67); // 60fps = 100%
+                        responsivePerformance.style.width = `${score}%`;
+                        
+                        if (fps > 55) {
+                            responsiveResult.innerHTML = `<span class="success">✅ Excellent (${fps.toFixed(1)} FPS)</span>`;
+                        } else if (fps > 30) {
+                            responsiveResult.innerHTML = `<span class="warning">⚠️ Bon (${fps.toFixed(1)} FPS)</span>`;
+                        } else {
+                            responsiveResult.innerHTML = `<span class="error">❌ Lent (${fps.toFixed(1)} FPS)</span>`;
+                        }
+                        
+                        this.results.performance.fps = fps;
+                    }
+                };
+                
+                requestAnimationFrame(testFPS);
+            }
+            
+            generateSummary() {
+                const summary = document.getElementById('summary');
+                const totalTests = Object.keys(this.results.css).length + 
+                                 Object.keys(this.results.icons).length + 
+                                 Object.keys(this.results.js).length;
+                
+                let passedTests = 0;
+                let totalScore = 0;
+                
+                // Compter les tests réussis
+                Object.values(this.results.css).forEach(result => {
+                    if (result) passedTests++;
+                    totalScore += result ? 100 : 0;
+                });
+                
+                Object.values(this.results.icons).forEach(result => {
+                    if (result) passedTests++;
+                    totalScore += result ? 100 : 0;
+                });
+                
+                Object.values(this.results.js).forEach(result => {
+                    if (result) passedTests++;
+                    totalScore += result ? 100 : 0;
+                });
+                
+                const averageScore = Math.round(totalScore / totalTests);
+                
+                let status = '';
+                if (averageScore >= 90) {
+                    status = '<span class="success">🟢 Excellent - Compatibilité parfaite</span>';
+                } else if (averageScore >= 70) {
+                    status = '<span class="warning">🟡 Bon - Compatibilité satisfaisante</span>';
+                } else {
+                    status = '<span class="error">🔴 Problématique - Compatibilité limitée</span>';
+                }
+                
+                summary.innerHTML = `
+                    <h3>Résultats des Tests</h3>
+                    <p><strong>Tests réussis:</strong> ${passedTests}/${totalTests}</p>
+                    <p><strong>Score moyen:</strong> ${averageScore}%</p>
+                    <p><strong>Statut:</strong> ${status}</p>
+                    <p><strong>Navigateur:</strong> ${navigator.userAgent}</p>
+                    <p><strong>Résolution:</strong> ${screen.width}x${screen.height}</p>
+                `;
+            }
+            
+            // Méthodes de détection
+            supportsBackdropFilter() {
+                return CSS.supports('backdrop-filter', 'blur(10px)') || 
+                       CSS.supports('-webkit-backdrop-filter', 'blur(10px)');
+            }
+            
+            supportsCSSGrid() {
+                return CSS.supports('display', 'grid');
+            }
+            
+            supportsCSSVariables() {
+                return CSS.supports('color', 'var(--test)');
+            }
+        }
+        
+        // Lancer les tests au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            new CompatibilityTester();
+        });
+    </script>
+</body>
+</html> 

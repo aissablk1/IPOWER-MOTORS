@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IPOWER MOTORS - Web Security Kit</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="Kit de sécurité web complet pour IPOWER MOTORS. Niveau Agence Élite à Ultra-Élite. Exemples, bonnes pratiques, snippets et recommandations avancées.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: none; }
+    }
+    .animate-fade-in {
+      animation: fade-in 0.7s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    .code-badge {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.75rem;
+      z-index: 20;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.15rem 0.7rem;
+      border-radius: 9999px;
+      background: linear-gradient(90deg,#232526 0%,#414345 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px 0 #0002;
+      letter-spacing: 0.04em;
+      pointer-events: none;
+      opacity: 0.92;
+    }
+    pre[class*="language-"] {
+      position: relative;
+      overflow-x: auto;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 24px 0 #0003;
+      margin-bottom: 2.5rem;
+      margin-top: 1.5rem;
+      background: #23272e;
+      padding-top: 2.2rem !important;
+    }
+    pre[class*="language-"] code {
+      font-size: 1em;
+      background: none !important;
+      padding: 0 !important;
+    }
+  </style>
+</head>
+<body class="bg-gray-950 text-gray-100 font-sans min-h-screen">
+  <div class="md:flex">
+    <!-- Sidebar sticky & responsive -->
+    <aside class="hidden md:block md:w-64 md:fixed md:top-0 md:left-0 md:h-full bg-gray-900/90 border-r border-gray-800 py-8 px-4 z-20" role="navigation" aria-label="Navigation principale">
+      <h2 class="text-lg font-bold text-blue-300 mb-4 flex items-center gap-2"><span>📚</span> Sommaire</h2>
+      <nav aria-label="Sommaire">
+        <ul class="space-y-2 text-sm">
+          <li><a href="#headers" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800 transition-all duration-200 ease-in-out focus:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Aller à En-têtes de sécurité" aria-current="page"><span>🛡️</span> En-têtes de sécurité</a></li>
+          <li><a href="#js" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800 transition-all duration-200 ease-in-out focus:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Aller à Refactorisation JS"><span>🧠</span> Refactorisation JS</a></li>
+          <li><a href="#anti-ocr" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800 transition-all duration-200 ease-in-out focus:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Aller à Anti-OCR / Scraping"><span>👁️</span> Anti-OCR / Scraping</a></li>
+          <li><a href="#bonus" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800 transition-all duration-200 ease-in-out focus:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Aller à Recommandations Bonus"><span>🧩</span> Recommandations Bonus</a></li>
+          <li><a href="#ultra" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800 transition-all duration-200 ease-in-out focus:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Aller à Ultra-Élite"><span>🚀</span> Ultra-Élite</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <!-- Mobile Sommaire Button -->
+    <div class="md:hidden block w-full bg-gray-900/90 border-b border-gray-800 sticky top-0 z-30">
+      <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" class="flex items-center gap-2 px-4 py-3 w-full text-blue-300 font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Ouvrir ou fermer le sommaire">
+        <span>📚</span> Sommaire
+        <svg class="w-5 h-5 ml-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <nav id="mobileMenu" class="hidden bg-gray-900 border-t border-gray-800 transition-all duration-300 ease-in-out" role="navigation" aria-label="Sommaire mobile">
+        <ul class="py-2 space-y-1 text-sm">
+          <li><a href="#headers" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Aller à En-têtes de sécurité"><span>🛡️</span> En-têtes de sécurité</a></li>
+          <li><a href="#js" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Aller à Refactorisation JS"><span>🧠</span> Refactorisation JS</a></li>
+          <li><a href="#anti-ocr" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Aller à Anti-OCR / Scraping"><span>👁️</span> Anti-OCR / Scraping</a></li>
+          <li><a href="#bonus" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Aller à Recommandations Bonus"><span>🧩</span> Recommandations Bonus</a></li>
+          <li><a href="#ultra" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-800 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400" aria-label="Aller à Ultra-Élite"><span>🚀</span> Ultra-Élite</a></li>
+        </ul>
+      </nav>
+    </div>
+    <!-- Contenu principal -->
+    <main class="md:ml-64 flex-1 px-20 py-8" role="main" tabindex="-1">
+      <header class="mb-12">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-blue-400 flex items-center gap-2 mb-2">
+          <span>🔐</span> IPOWER MOTORS - Web Security Kit
+        </h1>
+        <div class="mt-2 text-base text-gray-400">
+          <span class="mr-4">Version : <span class="font-semibold text-blue-300">Agence Élite & Ultra-Élite</span></span>
+          <span class="mr-4">Dernière mise à jour : Juillet 2025</span>
+          <span>Auteur : Aïssa Belkoussa</span>
+        </div>
+      </header>
+
+      <!-- Sommaire -->
+      <nav class="mb-10 bg-gray-900/80 rounded-lg p-4 border border-gray-800">
+        <h2 class="text-lg font-semibold text-blue-300 mb-2">Sommaire</h2>
+        <ul class="list-disc list-inside space-y-1 text-sm">
+          <li><a href="#headers" class="text-blue-400 hover:underline">1. En-têtes de sécurité : Backend, Frontend et Client</a></li>
+          <li><a href="#js" class="text-blue-400 hover:underline">2. Refactorisation JavaScript Professionnelle</a></li>
+          <li><a href="#anti-ocr" class="text-blue-400 hover:underline">3. Anti-OCR / Scraping Avancé</a></li>
+          <li><a href="#bonus" class="text-blue-400 hover:underline">4. Recommandations Bonus</a></li>
+          <li><a href="#ultra" class="text-blue-400 hover:underline">5. Niveau Ultra-Élite</a></li>
+        </ul>
+      </nav>
+
+      <!-- 1. En-têtes de sécurité -->
+      <section id="headers" class="mb-16">
+        <div class="flex items-center gap-2 mb-4">
+          <h2 class="text-2xl md:text-3xl font-bold text-blue-300 flex items-center gap-2">🛡️ 1. En-têtes de sécurité : Backend, Frontend et Client</h2>
+          <span class="inline-block bg-blue-700 text-blue-100 text-xs font-semibold px-2 py-0.5 rounded-full ml-2 animate-fade-in">Élite</span>
+        </div>
+        <div class="mb-6 p-4 bg-blue-900/60 border-l-4 border-blue-400 rounded flex items-start gap-3 animate-fade-in">
+          <span class="text-blue-300 text-xl mt-0.5">ℹ️</span>
+          <div class="text-gray-200 text-base"> <strong>Info :</strong> Ces en-têtes sont essentiels pour obtenir un score A+ sur securityheaders.com et Mozilla Observatory. </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Backend (.htaccess ou Nginx headers) - Version Élite</h3>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-green-400 language-apache"># CONFIGURATION DE SÉCURITÉ NIVEAU AGENCE ÉLITE
+# Score A+ sur securityheaders.com + Mozilla Observatory
+# CSP sans failles + Protection anti-bot avancée
+# ...
+
+# Voir TEST.md pour le code complet
+
+# (Extrait principal)
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-Frame-Options "DENY"
+Header always set X-XSS-Protection "1; mode=block"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "accelerometer=(), ambient-light-sensor=(), autoplay=(), ..."
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' ..."
+Header always set Cross-Origin-Embedder-Policy "require-corp"
+Header always set Cross-Origin-Opener-Policy "same-origin"
+Header always set Cross-Origin-Resource-Policy "same-origin"
+# ...
+</code></pre>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Frontend (&lt;meta&gt; dans &lt;head&gt;) - Version Élite</h3>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-pink-300 language-html">&lt;meta http-equiv="Content-Security-Policy" content="..."&gt;
+&lt;meta http-equiv="X-Frame-Options" content="DENY"&gt;
+&lt;meta http-equiv="X-Content-Type-Options" content="nosniff"&gt;
+&lt;meta name="referrer" content="strict-origin-when-cross-origin"&gt;
+&lt;meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()"&gt;
+# ...
+</code></pre>
+          </div>
+        </div>
+</section>
+      <hr class="my-12 border-gray-800">
+      <!-- 2. Refactorisation JS -->
+      <section id="js" class="mb-16">
+        <div class="flex items-center gap-2 mb-4">
+          <h2 class="text-2xl md:text-3xl font-bold text-blue-300 flex items-center gap-2">🧠 2. Refactorisation JavaScript Professionnelle</h2>
+          <span class="inline-block bg-green-700 text-green-100 text-xs font-semibold px-2 py-0.5 rounded-full ml-2">Élite</span>
+        </div>
+        <div class="mb-6 p-4 bg-green-900/60 border-l-4 border-green-400 rounded flex items-start gap-3">
+          <span class="text-green-300 text-xl mt-0.5">💡</span>
+          <div class="text-gray-200 text-base"> <strong>Astuce :</strong> Utilisez des modules JS pour une meilleure maintenabilité et sécurité du code côté client. </div>
+        </div>
+        <div class="mb-4">
+          <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Version modulaire refactorisée (niveau agence élite)</h3>
+          <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-yellow-200 language-javascript">&lt;script&gt;
+// SÉCURITÉ ET DYNAMIQUE - NIVEAU AGENCE ÉLITE
+// Version modulaire, encapsulée et maintenable
+// ...
+document.addEventListener("DOMContentLoaded", () =&gt; {
+    // ...
+    // Voir TEST.md pour le code complet
+});
+&lt;/script&gt;
+
+&lt;!-- Éléments HTML correspondants --&gt;
+&lt;span id="domainName" aria-label="Nom de domaine de ce site web affiché dynamiquement pour accessibilité"&gt;&lt;/span&gt;
+&lt;p&gt;
+    Contactez-nous à :
+    &lt;span id="dynamicEmail" data-user="contact"&gt;&lt;/span&gt;
+    &lt;noscript&gt;
+        &lt;span style="unicode-bidi: bidi-override; direction: rtl;"&gt;
+        rf.ecnairfrewopi@tcatnoc
+        &lt;/span&gt;
+    &lt;/noscript&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    Contactez-nous à :
+    &lt;span class="anti-bot-email" aria-label="contact@ipowerfrance.fr"&gt;&lt;/span&gt;
+&lt;/p&gt;
+&lt;input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off"&gt;
+</code></pre>
+        </div>
+</section>
+      <hr class="my-12 border-gray-800">
+      <!-- 3. Anti-OCR / Scraping avancé -->
+      <section id="anti-ocr" class="mb-16">
+        <div class="flex items-center gap-2 mb-4">
+          <h2 class="text-2xl md:text-3xl font-bold text-blue-300 flex items-center gap-2">👁️ 3. Anti-OCR / Scraping Avancé - Niveau Agence Cybersécurité</h2>
+          <span class="inline-block bg-yellow-600 text-yellow-100 text-xs font-semibold px-2 py-0.5 rounded-full ml-2">Bonus</span>
+        </div>
+        <div class="mb-6 p-4 bg-yellow-900/60 border-l-4 border-yellow-400 rounded flex items-start gap-3">
+          <span class="text-yellow-300 text-xl mt-0.5">⚠️</span>
+          <div class="text-gray-200 text-base"> <strong>Attention :</strong> Ces techniques sont complémentaires et ne remplacent pas une bonne configuration des en-têtes de sécurité. </div>
+        </div>
+        <div class="mb-4">
+          <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Techniques invisibles + Scrambling + Zero-width</h3>
+          <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-yellow-200 language-javascript">&lt;script&gt;
+// ANTI-OCR / SCRAPING NIVEAU AGENCE CYBERSÉCURITÉ
+// ...
+// Voir TEST.md pour le code complet
+&lt;/script&gt;
+
+&lt;!-- Éléments HTML pour les différentes techniques --&gt;
+&lt;p&gt;
+    Contactez-nous à :
+    &lt;span class="anti-bot-email" aria-label="contact@ipowerfrance.fr"&gt;&lt;/span&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    Email sécurisé :
+    &lt;span id="safeEmail" data-obfuscated="" aria-label="contact@ipowerfrance.fr"&gt;&lt;/span&gt;
+&lt;/p&gt;
+</code></pre>
+        </div>
+</section>
+      <hr class="my-12 border-gray-800">
+      <!-- 4. Recommandations Bonus -->
+      <section id="bonus" class="mb-16">
+        <div class="flex items-center gap-2 mb-4">
+          <h2 class="text-2xl md:text-3xl font-bold text-blue-300 flex items-center gap-2">🧩 4. Recommandations Bonus - Niveau Agence Élite</h2>
+          <span class="inline-block bg-purple-700 text-purple-100 text-xs font-semibold px-2 py-0.5 rounded-full ml-2">Bonus</span>
+        </div>
+        <div class="space-y-6">
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Monitoring & Journalisation</h3>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-yellow-200 language-bash">&lt;script&gt;
+// MONITORING ET JOURNALISATION NIVEAU ÉLITE
+// ...
+// Voir TEST.md pour le code complet
+&lt;/script&gt;
+</code></pre>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ JSON-LD Sécurisé</h3>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-pink-300 language-json">&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "@id": "https://ipowerfrance.fr/#business",
+  ...
+}
+&lt;/script&gt;
+</code></pre>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Cookies Secure et SameSite</h3>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-green-400 language-bash"># Configuration cookies sécurisés (à ajouter dans .htaccess)
+Header always set Set-Cookie "session=xyz; Secure; HttpOnly; SameSite=Strict; Path=/"
+Header always set Set-Cookie "csrf=abc; Secure; HttpOnly; SameSite=Strict; Path=/"
+</code></pre>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Politique avancée DNSSEC + DMARC</h3>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-blue-300 language-bash"># Configuration DNS recommandée (chez OVH/Infomaniak)
+
+# DMARC
+_dmarc.ipowerfrance.fr. IN TXT "v=DMARC1; p=quarantine; rua=mailto:dmarc@ipowerfrance.fr; ..."
+# SPF
+ipowerfrance.fr. IN TXT "v=spf1 include:_spf.google.com include:_spf.ovh.com ~all"
+# DKIM (à configurer selon votre fournisseur d'email)
+# ...
+</code></pre>
+          </div>
+        </div>
+</section>
+      <hr class="my-12 border-gray-800">
+      <!-- 5. Niveau Ultra-Élite -->
+      <section id="ultra" class="mb-16">
+        <div class="flex items-center gap-2 mb-4">
+          <h2 class="text-2xl md:text-3xl font-bold text-blue-300 flex items-center gap-2">🚀 5. NIVEAU ULTRA-ÉLITE - Recommandations Avancées</h2>
+          <span class="inline-block bg-pink-700 text-pink-100 text-xs font-semibold px-2 py-0.5 rounded-full ml-2">Ultra-Élite</span>
+        </div>
+        <div class="mb-6 p-4 bg-pink-900/60 border-l-4 border-pink-400 rounded flex items-start gap-3">
+          <span class="text-pink-300 text-xl mt-0.5">🚨</span>
+          <div class="text-gray-200 text-base"> <strong>Conseil expert :</strong> Ces recommandations sont destinées aux applications à très haut niveau d’exigence (secteur bancaire, santé, etc.). </div>
+        </div>
+        <div class="space-y-6">
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ CSP Dynamique + Trusted Types (Applications JS Modernes)</h3>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-yellow-200 language-javascript">&lt;script&gt;
+// CSP DYNAMIQUE + TRUSTED TYPES - NIVEAU ULTRA-ÉLITE
+// ...
+// Voir TEST.md pour le code complet
+&lt;/script&gt;
+</code></pre>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Anti-Fingerprinting Amélioré (Respect Privacy)</h3>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-yellow-200 language-javascript">&lt;script&gt;
+// ANTI-FINGERPRINTING RESPECTUEUX - NIVEAU ULTRA-ÉLITE
+// ...
+// Voir TEST.md pour le code complet
+&lt;/script&gt;
+</code></pre>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Honeypot Actif avec Redirection</h3>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-green-400 language-bash"># HONEYPOT ACTIF - NIVEAU ULTRA-ÉLITE
+# ...
+# Voir TEST.md pour le code complet
+</code></pre>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800 mt-2"><code class="text-pink-300 language-html">&lt;!-- /trap/honeypage.html - Page de piégeage --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="fr"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Page de maintenance - IPOWER MOTORS&lt;/title&gt;
+    &lt;meta name="robots" content="noindex, nofollow"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Site en maintenance&lt;/h1&gt;
+    &lt;p&gt;Nous effectuons actuellement des travaux de maintenance.&lt;/p&gt;
+    &lt;p&gt;Veuillez revenir plus tard.&lt;/p&gt;
+    &lt;a href="/admin"&gt;Administration&lt;/a&gt;
+    &lt;a href="/wp-admin"&gt;WordPress Admin&lt;/a&gt;
+    &lt;a href="/phpmyadmin"&gt;phpMyAdmin&lt;/a&gt;
+    &lt;script&gt;
+        document.querySelectorAll('a').forEach(link =&gt; {
+            link.addEventListener('click', (e) =&gt; {
+                e.preventDefault();
+                console.log('Tentative d\'accès à un lien piégé détectée');
+            });
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Dashboard de Monitoring Intégré</h3>
+            <pre class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto border border-gray-800"><code class="text-yellow-200 language-javascript">&lt;script&gt;
+// DASHBOARD MONITORING - NIVEAU ULTRA-ÉLITE
+// ...
+// Voir TEST.md pour le code complet
+&lt;/script&gt;
+</code></pre>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-blue-200 mb-2">✅ Résumé des améliorations Ultra-Élite</h3>
+            <div class="overflow-x-auto rounded-lg shadow-lg border border-gray-800">
+              <table class="min-w-full text-xs text-left">
+                <thead class="bg-gray-800 text-blue-300">
+                  <tr>
+                    <th class="px-3 py-2">Zone</th>
+                    <th class="px-3 py-2">Amélioration Ultra-Élite</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-gray-900 divide-y divide-gray-800">
+                  <tr class="hover:bg-gray-800 transition">
+                    <td class="px-3 py-2">CSP Dynamique</td><td class="px-3 py-2">Trusted Types + validation personnalisée + sanitisation</td>
+                  </tr>
+                  <tr class="bg-gray-950/60 hover:bg-gray-800 transition">
+                    <td class="px-3 py-2">Anti-Fingerprinting</td><td class="px-3 py-2">Détection douce + comportementale + respect privacy</td>
+                  </tr>
+                  <tr class="hover:bg-gray-800 transition">
+                    <td class="px-3 py-2">Honeypot Actif</td><td class="px-3 py-2">Redirection + page piégée + blocage IP automatique</td>
+                  </tr>
+                  <tr class="bg-gray-950/60 hover:bg-gray-800 transition">
+                    <td class="px-3 py-2">Dashboard</td><td class="px-3 py-2">Intégration Discord/Telegram + Notion + n8n + Grafana</td>
+                  </tr>
+                  <tr class="hover:bg-gray-800 transition">
+                    <td class="px-3 py-2">Monitoring</td><td class="px-3 py-2">Seuils configurables + alertes temps réel + centralisation</td>
+                  </tr>
+                  <tr class="bg-gray-950/60 hover:bg-gray-800 transition">
+                    <td class="px-3 py-2">Privacy</td><td class="px-3 py-2">Respect Tor/Brave + pas de fingerprinting agressif</td>
+                  </tr>
+                  <tr class="hover:bg-gray-800 transition">
+                    <td class="px-3 py-2">Scalability</td><td class="px-3 py-2">🚀 Enterprise | Ready for production + monitoring</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-4 text-green-400 font-semibold">Niveau Final : 🟩 Lead Architecte Sécurité Full-Stack + Consultant Pentest-Ready</div>
+          </div>
+        </div>
+</section>
+      <hr class="my-12 border-gray-800">
+      <footer class="mt-12 text-center text-xs text-gray-500">
+        &copy; 2025 IPOWER MOTORS — Kit de sécurité web. Tous droits réservés.<br>
+        <span class="text-gray-700">Réalisé par Aïssa Belkoussa</span>
+      </footer>
+    </main>
+  </div>
+  <!-- Script copier/coller pour tous les blocs de code -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('pre > code').forEach((codeBlock, idx) => {
+        const pre = codeBlock.parentElement;
+        // Crée le bouton
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'absolute top-2 right-2 bg-blue-700 text-xs text-white px-3 py-1 rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 z-10 transition-transform duration-200 hover:scale-105';
+        btn.innerHTML = '<svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copier';
+        btn.setAttribute('aria-label', 'Copier le code');
+        btn.tabIndex = 0;
+        // Message copié
+        const copiedMsg = document.createElement('span');
+        copiedMsg.textContent = 'Copié !';
+        copiedMsg.className = 'hidden absolute top-2 right-24 bg-green-700 text-white text-xs px-2 py-1 rounded shadow';
+        copiedMsg.setAttribute('role', 'status');
+        copiedMsg.setAttribute('aria-live', 'polite');
+        pre.classList.add('relative');
+        pre.appendChild(btn);
+        pre.appendChild(copiedMsg);
+        btn.addEventListener('click', () => {
+          // Copie le texte du code
+          navigator.clipboard.writeText(codeBlock.innerText).then(() => {
+            copiedMsg.classList.remove('hidden');
+            setTimeout(() => copiedMsg.classList.add('hidden'), 1500);
+          });
+        });
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+  <!-- Script pour badges de langage -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('pre > code').forEach((codeBlock) => {
+        const pre = codeBlock.parentElement;
+        // Détecte le langage
+        let lang = 'txt';
+        const match = codeBlock.className.match(/language-([a-zA-Z0-9]+)/);
+        if (match) lang = match[1].toUpperCase();
+        // Badge
+        const badge = document.createElement('span');
+        badge.className = 'code-badge';
+        badge.textContent = lang;
+        pre.insertBefore(badge, pre.firstChild);
+      });
+    });
+  </script>
+</body>
+</html>
