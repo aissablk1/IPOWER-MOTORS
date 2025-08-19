@@ -9,7 +9,7 @@ set -u  # Erreur si variable non définie
 # Configuration
 PROJECT_ROOT="/Volumes/Professionnel/CRÉATIVE AÏSSA/Entreprises/IPOWER MOTORS"
 SERVEUR_DIR="$PROJECT_ROOT/Site Web/Serveur"
-AWS_SCRIPTS_DIR="$PROJECT_ROOT/Site Web/infrastructure/aws/scripts"
+AWS_SCRIPTS_DIR="$SERVEUR_DIR/infrastructure/AWS/scripts"
 BACKEND_DIR="$SERVEUR_DIR/app/backend"
 FRONTEND_DIR="$SERVEUR_DIR/app/frontend"
 
