@@ -7,8 +7,8 @@ set -euo pipefail
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-TERRAFORM_DIR="$PROJECT_ROOT/infrastructure/aws/terraform"
-DEPLOY_SCRIPT="$PROJECT_ROOT/infrastructure/aws/scripts/deploy.sh"
+TERRAFORM_DIR="$PROJECT_ROOT/infrastructure/AWS/terraform"
+DEPLOY_SCRIPT="$PROJECT_ROOT/infrastructure/AWS/scripts/deploy.sh"
 
 # Variables globales
 FRONTEND_DIR="$SCRIPT_DIR/app/frontend"

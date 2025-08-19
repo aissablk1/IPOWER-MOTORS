@@ -5,82 +5,70 @@ export const authController = {
     try {
       const { email, password } = req.body;
       
-      // Validate request body
+      // TODO: Implémenter la logique d'authentification
       if (!email || !password) {
-        return res.status(400).json({ message: 'Email and password are required' });
+        return res.status(400).json({ error: 'Email et mot de passe requis' });
       }
-
-      // Mock successful login for development
-      const mockUser = {
-        id: '123',
-        email: email,
-        name: 'Test User'
-      };
-      const mockToken = require('crypto').createHash('sha256').update('mock-jwt-token').digest('hex');
-      const mockRefreshToken = require('crypto').createHash('sha256').update('mock-refresh-token').digest('hex');
-
-      res.status(200).json({
-        user: mockUser,
-        token: mockToken,
-        refreshToken: mockRefreshToken
-      });
+      
+      // Simulation d'authentification
+      if (email === 'admin@ipowerfrance.fr' && password === 'admin123') {
+        return res.status(200).json({ 
+          message: 'Connexion réussie',
+          token: 'fake-jwt-token',
+          user: { email, role: 'admin' }
+        });
+      }
+      
+      return res.status(401).json({ error: 'Identifiants invalides' });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ error: 'Erreur serveur' });
     }
   },
-  
+
   register: async (req: Request, res: Response) => {
     try {
       const { email, password, name } = req.body;
-
-      // Validate request body
+      
+      // TODO: Implémenter la logique d'inscription
       if (!email || !password || !name) {
-        return res.status(400).json({ message: 'Email, password and name are required' });
+        return res.status(400).json({ error: 'Tous les champs sont requis' });
       }
-
-      // Mock successful registration
-      const mockUser = {
-        id: '123',
-        email,
-        name
-      };
-
-      res.status(201).json({
-        user: mockUser,
-        message: 'Registration successful'
+      
+      // Simulation d'inscription
+      return res.status(201).json({ 
+        message: 'Inscription réussie',
+        user: { email, name, role: 'user' }
       });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ error: 'Erreur serveur' });
     }
   },
 
-  logout: async (req: Request, res: Response) => {
+  logout: async (_req: Request, res: Response) => {
     try {
-      // Mock successful logout
-      res.status(200).json({ message: 'Logged out successfully' });
+      // TODO: Implémenter la logique de déconnexion
+      return res.status(200).json({ message: 'Déconnexion réussie' });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ error: 'Erreur serveur' });
     }
   },
 
   refreshToken: async (req: Request, res: Response) => {
     try {
       const { refreshToken } = req.body;
-
+      
+      // TODO: Implémenter la logique de refresh token
       if (!refreshToken) {
-        return res.status(400).json({ message: 'Refresh token is required' });
+        return res.status(400).json({ error: 'Refresh token requis' });
       }
-
-      // Mock successful token refresh
-      const mockNewToken = 'new-mock-jwt-token';
-      const mockNewRefreshToken = 'new-mock-refresh-token';
-
-      res.status(200).json({
-        token: mockNewToken,
-        refreshToken: mockNewRefreshToken
+      
+      // Simulation de refresh
+      return res.status(200).json({ 
+        message: 'Token rafraîchi',
+        token: 'new-fake-jwt-token'
       });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ error: 'Erreur serveur' });
     }
   }
 }; 

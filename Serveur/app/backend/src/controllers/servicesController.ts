@@ -1,133 +1,132 @@
 import { Request, Response } from 'express';
-import { Service } from '../types/index.js';
-
-// Mock data for services
-const mockServices: Service[] = [
-  {
-    id: '1',
-    name: 'Entretien Général',
-    description: 'Vidange, filtres, bougies et révisions complètes selon les préconisations constructeur.',
-    price: 'À partir de 89€',
-    category: 'entretien',
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '2',
-    name: 'Réparation Mécanique',
-    description: 'Diagnostic et réparation de tous types de pannes mécaniques et électroniques.',
-    price: 'Sur devis',
-    category: 'reparation',
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '3',
-    name: 'Optimisation Moteur',
-    description: 'Reprogrammation moteur pour améliorer performances et consommation.',
-    price: 'À partir de 299€',
-    category: 'optimisation',
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '4',
-    name: 'Préparation Sportive',
-    description: 'Modifications pour améliorer les performances et l\'esthétique de votre véhicule.',
-    price: 'Sur devis',
-    category: 'preparation',
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '5',
-    name: 'Contrôle Technique',
-    description: 'Préparation et passage du contrôle technique avec garantie de réussite.',
-    price: 'À partir de 49€',
-    category: 'controle',
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '6',
-    name: 'Service Express',
-    description: 'Interventions rapides pour les urgences et dépannages sur site.',
-    price: 'Sur devis',
-    category: 'urgence',
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
 
 export const servicesController = {
-  getAllServices: async (req: Request, res: Response) => {
+  createService: async (req: Request, res: Response) => {
     try {
-      const activeServices = mockServices.filter(service => service.isActive);
+      const { name, description, price, category } = req.body;
       
-      res.status(200).json({
-        success: true,
-        data: activeServices,
-        count: activeServices.length,
+      // TODO: Implémenter la logique de création de service
+      if (!name || !description || !price || !category) {
+        return res.status(400).json({ error: 'Tous les champs sont requis' });
+      }
+      
+      // Simulation de création
+      const newService = {
+        id: Date.now().toString(),
+        name,
+        description,
+        price: parseFloat(price),
+        category,
+        createdAt: new Date().toISOString()
+      };
+      
+      return res.status(201).json({ 
+        message: 'Service créé avec succès',
+        service: newService
       });
     } catch (error) {
-      console.error('Error fetching services:', error);
-      res.status(500).json({
-        success: false,
-        error: 'Erreur lors de la récupération des services.',
-      });
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+  },
+
+  getAllServices: async (_req: Request, res: Response) => {
+    try {
+      // TODO: Implémenter la logique de récupération des services
+      const mockServices = [
+        {
+          id: '1',
+          name: 'Vidange moteur',
+          description: 'Vidange complète du moteur avec filtre à huile',
+          price: 89.99,
+          category: 'Entretien',
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: '2',
+          name: 'Remplacement plaquettes',
+          description: 'Remplacement des plaquettes de frein avant',
+          price: 129.99,
+          category: 'Freinage',
+          createdAt: new Date().toISOString()
+        }
+      ];
+      
+      return res.status(200).json({ services: mockServices });
+    } catch (error) {
+      return res.status(500).json({ error: 'Erreur serveur' });
     }
   },
 
   getServiceById: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const service = mockServices.find(s => s.id === id && s.isActive);
-
-      if (!service) {
-        return res.status(404).json({
-          success: false,
-          error: 'Service non trouvé.',
-        });
+      
+      // TODO: Implémenter la logique de récupération par ID
+      if (!id) {
+        return res.status(400).json({ error: 'ID du service requis' });
       }
-
-      res.status(200).json({
-        success: true,
-        data: service,
-      });
+      
+      // Simulation de récupération
+      const mockService = {
+        id,
+        name: 'Vidange moteur',
+        description: 'Vidange complète du moteur avec filtre à huile',
+        price: 89.99,
+        category: 'Entretien',
+        createdAt: new Date().toISOString()
+      };
+      
+      return res.status(200).json({ service: mockService });
     } catch (error) {
-      console.error('Error fetching service by ID:', error);
-      res.status(500).json({
-        success: false,
-        error: 'Erreur lors de la récupération du service.',
-      });
+      return res.status(500).json({ error: 'Erreur serveur' });
     }
   },
 
-  getServicesByCategory: async (req: Request, res: Response) => {
+  updateService: async (req: Request, res: Response) => {
     try {
-      const { category } = req.params;
-      const services = mockServices.filter(
-        service => service.category === category && service.isActive
-      );
-
-      res.status(200).json({
-        success: true,
-        data: services,
-        count: services.length,
-        category,
+      const { id } = req.params;
+      const { name, description, price, category } = req.body;
+      
+      // TODO: Implémenter la logique de mise à jour
+      if (!id) {
+        return res.status(400).json({ error: 'ID du service requis' });
+      }
+      
+      // Simulation de mise à jour
+      const updatedService = {
+        id,
+        name: name || 'Vidange moteur',
+        description: description || 'Vidange complète du moteur avec filtre à huile',
+        price: price ? parseFloat(price) : 89.99,
+        category: category || 'Entretien',
+        updatedAt: new Date().toISOString()
+      };
+      
+      return res.status(200).json({ 
+        message: 'Service mis à jour avec succès',
+        service: updatedService
       });
     } catch (error) {
-      console.error('Error fetching services by category:', error);
-      res.status(500).json({
-        success: false,
-        error: 'Erreur lors de la récupération des services par catégorie.',
-      });
+      return res.status(500).json({ error: 'Erreur serveur' });
     }
   },
+
+  deleteService: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      
+      // TODO: Implémenter la logique de suppression
+      if (!id) {
+        return res.status(400).json({ error: 'ID du service requis' });
+      }
+      
+      // Simulation de suppression
+      return res.status(200).json({ 
+        message: 'Service supprimé avec succès',
+        deletedId: id
+      });
+    } catch (error) {
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+  }
 }; 

@@ -1,33 +1,19 @@
-import express = require('express');
+import express from 'express';
 
 const app = express();
-const PORT = 3002;
+const port = process.env.PORT || 3000;
 
-app.use(express.json());
-
-app.get('/health', (req, res) => {
-  res.json({
-    success: true,
-    message: 'IPOWER MOTORS API is running',
-    timestamp: new Date().toISOString(),
-  });
+app.get('/health', (_req, res) => {
+  res.send('OK');
 });
 
-app.get('/api/services', (req, res) => {
-  res.json({
-    success: true,
-    data: [
-      {
-        id: '1',
-        name: 'Entretien Général',
-        description: 'Vidange, filtres, bougies et révisions complètes.',
-        price: 'À partir de 89€',
-      },
-    ],
-  });
+app.get('/api/services', (_req, res) => {
+  res.json([
+    { id: 1, name: 'Service A' },
+    { id: 2, name: 'Service B' },
+  ]);
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+app.listen(port, () => {
+  console.log(`Simple server listening at http://localhost:${port}`);
 }); 

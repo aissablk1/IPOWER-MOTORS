@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 
-const app = express();
+const app: Express = express();
 const PORT = 3001;
 
 // Middlewares

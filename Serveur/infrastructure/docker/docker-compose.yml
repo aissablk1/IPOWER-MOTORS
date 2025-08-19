@@ -7,13 +7,13 @@ services:
   # Frontend React (simulation S3 + CloudFront)
   frontend:
     build:
-      context: ../app/frontend
+      context: ../../app/frontend
       dockerfile: Dockerfile
     ports:
       - "5173:80"
     volumes:
-      - ../app/frontend/src:/app/src
-      - ../app/frontend/public:/app/public
+      - ../../app/frontend/src:/app/src
+      - ../../app/frontend/public:/app/public
     environment:
       - NODE_ENV=development
       - VITE_API_URL=http://localhost:3001
@@ -24,13 +24,13 @@ services:
   # Backend Express (simulation EC2)
   backend:
     build:
-      context: ../app/backend
+      context: ../../app/backend
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
     volumes:
-      - ../app/backend/src:/app/src
-      - ../app/backend/dist:/app/dist
+      - ../../app/backend/src:/app/src
+      - ../../app/backend/dist:/app/dist
     environment:
       - NODE_ENV=development
       - PORT=3001
@@ -52,7 +52,7 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ../AWS-Resources/databases/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ../../AWS-Resources/databases/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -75,7 +75,7 @@ services:
       - "8080:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ../app/frontend/dist:/usr/share/nginx/html
+      - ../../app/frontend/dist:/usr/share/nginx/html
     depends_on:
       - frontend
       - backend

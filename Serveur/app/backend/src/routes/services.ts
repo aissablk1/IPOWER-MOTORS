@@ -1,18 +1,18 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { servicesController } from '../controllers/servicesController.js';
 
-const router = express.Router();
+const router: Router = express.Router();
 
-// Routes
+// Routes pour les services
+router.post('/', servicesController.createService);
 router.get('/', servicesController.getAllServices);
 router.get('/:id', servicesController.getServiceById);
-router.get('/category/:category', servicesController.getServicesByCategory);
+router.put('/:id', servicesController.updateService);
+router.delete('/:id', servicesController.deleteService);
 
-router.get('/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Services API is working',
-  });
+// Route de santé
+router.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'OK', service: 'Services API' });
 });
 
 export default router; 
