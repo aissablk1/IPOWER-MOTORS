@@ -338,6 +338,8 @@ post_deploy_check() {
 
 # Fonction principale
 main() {
+    clear
+
     echo -e "${BLUE}"
     echo "╔══════════════════════════════════════════════════════════════╗"
     echo "║                🚀 DÉPLOIEMENT IPOWER MOTORS 🚀               ║"
